@@ -14,7 +14,6 @@ struct WeatherCard: View {
     
     @State private var iconData: Data?
     @ObservedObject private var userDefaultsService = UserDefaultsService.shared
-//    @AppStorage(Constants.UserDefaultsKeys.temperatureUnit) private var temperatureUnit: TemperatureUnit = .celsius
     
     var body: some View {
         VStack(spacing: 16) {

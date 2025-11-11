@@ -12,7 +12,7 @@ enum Constants {
     enum API {
         static let baseURL = "https://api.openweathermap.org/data/2.5/weather"
         static let iconBaseURL = "https://openweathermap.org/img/wn/"
-        static let apiKey = "16d85e71efc499d3ddc63fe89f1846e7" // 替换为你的实际 API Key
+        static let apiKey = "16d85e71efc499d3ddc63fe89f1846e7"
     }
     
     // MARK: - UserDefaults Keys
