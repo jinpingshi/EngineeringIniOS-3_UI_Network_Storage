@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct SettingsView: View {
-    @ObservedObject private var storageService = StorageService.shared
+    @ObservedObject private var userDefaultsService = UserDefaultsService.shared
     @State private var cacheSize: Int64 = 0
     @State private var showClearCacheAlert = false
     @State private var showClearFavoritesAlert = false
@@ -18,7 +18,7 @@ struct SettingsView: View {
             Form {
                 // Temperature Unit Section
                 Section {
-                    Picker("Temperature Unit", selection: $storageService.temperatureUnit) {
+                    Picker("Temperature Unit", selection: $userDefaultsService.temperatureUnit) {
                         ForEach(TemperatureUnit.allCases, id: \.self) { unit in
                             Text(unit.rawValue).tag(unit)
                         }
@@ -53,11 +53,11 @@ struct SettingsView: View {
                     HStack {
                         Text("Favorite Cities")
                         Spacer()
-                        Text("\(storageService.favoriteCities.count)")
+                        Text("\(userDefaultsService.favoriteCities.count)")
                             .foregroundColor(.secondary)
                     }
                     
-                    if !storageService.favoriteCities.isEmpty {
+                    if !userDefaultsService.favoriteCities.isEmpty {
                         Button(role: .destructive) {
                             showClearFavoritesAlert = true
                         } label: {
@@ -97,7 +97,7 @@ struct SettingsView: View {
             .alert("Clear Favorites", isPresented: $showClearFavoritesAlert) {
                 Button("Cancel", role: .cancel) { }
                 Button("Clear", role: .destructive) {
-                    storageService.clearFavorites()
+                    userDefaultsService.clearFavorites()
                 }
             } message: {
                 Text("Are you sure you want to remove all favorite cities?")

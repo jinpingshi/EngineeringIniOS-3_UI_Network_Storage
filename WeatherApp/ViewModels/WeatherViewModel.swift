@@ -17,23 +17,23 @@ class WeatherViewModel: ObservableObject {
     @Published var searchText: String = ""
     
     private let weatherService: WeatherServiceProtocol
-    private let storageService: StorageService
+    private let userDefaultsService: UserDefaultsService
     private let cacheService: CacheServiceProtocol
     private let coreDataService: CoreDataServiceProtocol
     private var cancellables = Set<AnyCancellable>()
     
     init(
         weatherService: WeatherServiceProtocol? = nil,
-        storageService: StorageService? = nil,
+        userDefaultsService: UserDefaultsService? = nil,
         cacheService: CacheServiceProtocol? = nil,
         coreDataService: CoreDataServiceProtocol? = nil
     ) {
         self.weatherService = weatherService ?? WeatherService.shared
-        self.storageService = storageService ?? StorageService.shared
+        self.userDefaultsService = userDefaultsService ?? UserDefaultsService.shared
         self.cacheService = cacheService ?? CacheService.shared
         self.coreDataService = coreDataService ?? CoreDataService.shared
         
-        self.storageService.objectWillChange
+        self.userDefaultsService.objectWillChange
             .sink { [weak self] _ in
                 self?.objectWillChange.send()
             }
@@ -50,7 +50,7 @@ class WeatherViewModel: ObservableObject {
         do {
             let weather = try await weatherService.fetchWeather(city: city)
             currentWeather = weather
-            storageService.lastSearchedCity = city
+            userDefaultsService.lastSearchedCity = city
             coreDataService.saveWeather(weather)
         } catch {
             errorMessage = error.localizedDescription
@@ -61,24 +61,24 @@ class WeatherViewModel: ObservableObject {
     
     // MARK: - Favorites
     func toggleFavorite(for city: String) {
-        if storageService.isFavorite(city) {
-            storageService.removeFromFavorites(city)
+        if userDefaultsService.isFavorite(city) {
+            userDefaultsService.removeFromFavorites(city)
         } else {
-            storageService.addToFavorites(city)
+            userDefaultsService.addToFavorites(city)
         }
     }
     
     func isFavorite(_ city: String) -> Bool {
-        storageService.isFavorite(city)
+        userDefaultsService.isFavorite(city)
     }
     
     var favoriteCities: [String] {
-        storageService.favoriteCities
+        userDefaultsService.favoriteCities
     }
     
     // MARK: - Load Last Search
     func loadLastSearch() {
-        if let lastCity = storageService.lastSearchedCity {
+        if let lastCity = userDefaultsService.lastSearchedCity {
             searchText = lastCity
             Task {
                 await fetchWeather(for: lastCity)

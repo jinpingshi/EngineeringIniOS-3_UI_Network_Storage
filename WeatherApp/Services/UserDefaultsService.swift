@@ -1,5 +1,5 @@
 //
-//  StorageService.swift
+//  UserDefaultsService.swift
 //  WeatherApp
 //
 //  Created by Jinping Shi on 2025/11/11.
@@ -9,7 +9,7 @@ import Foundation
 import Combine
 
 // MARK: - Storage Service Protocol
-protocol StorageServiceProtocol: AnyObject {
+protocol UserDefaultsServiceProtocol: AnyObject {
     var favoriteCities: [String] { get set }
     var temperatureUnit: TemperatureUnit { get set }
     var lastSearchedCity: String? { get set }
@@ -21,8 +21,8 @@ protocol StorageServiceProtocol: AnyObject {
 }
 
 // MARK: - Storage Service Implementation
-final class StorageService: StorageServiceProtocol, ObservableObject {
-    static let shared = StorageService()
+final class UserDefaultsService: UserDefaultsServiceProtocol, ObservableObject {
+    static let shared = UserDefaultsService()
     
     // MARK: - UserDefaults Properties
     @UserDefault(key: Constants.UserDefaultsKeys.favoriteCities, defaultValue: [])

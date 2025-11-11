@@ -13,7 +13,7 @@ struct WeatherCard: View {
     let onFavoriteToggle: () -> Void
     
     @State private var iconData: Data?
-    @ObservedObject private var storageService = StorageService.shared
+    @ObservedObject private var userDefaultsService = UserDefaultsService.shared
 //    @AppStorage(Constants.UserDefaultsKeys.temperatureUnit) private var temperatureUnit: TemperatureUnit = .celsius
     
     var body: some View {
@@ -57,7 +57,7 @@ struct WeatherCard: View {
                 }
                 
                 VStack(alignment: .leading, spacing: 8) {
-                    Text(weather.temperatureString(unit: storageService.temperatureUnit))
+                    Text(weather.temperatureString(unit: userDefaultsService.temperatureUnit))
                         .font(.system(size: 48, weight: .bold))
                     
                     Text(weather.description.capitalized)
@@ -75,7 +75,7 @@ struct WeatherCard: View {
                 WeatherInfoItem(
                     icon: "thermometer",
                     title: "Feels Like",
-                    value: weather.feelsLikeString(unit: storageService.temperatureUnit)
+                    value: weather.feelsLikeString(unit: userDefaultsService.temperatureUnit)
                 )
                 
                 WeatherInfoItem(
